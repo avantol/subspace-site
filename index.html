@@ -52,6 +52,7 @@
   .brand img { width: 30px; height: 30px; border-radius: 8px; }
   .brand:hover { text-decoration: none; }
   nav .links { display: flex; gap: 22px; margin-left: auto; }
+  section, header { scroll-margin-top: 72px; } /* menu jumps land below the sticky bar */
   nav .links a { color: var(--muted); font-size: 15px; font-weight: 500; }
   nav .links a:hover { color: var(--text); text-decoration: none; }
   .btn {
@@ -190,8 +191,15 @@
     .feature, .jtty { grid-template-columns: 1fr; gap: 28px; }
     .feature.flip .text { order: 0; }
     .compat { grid-template-columns: 1fr 1fr; }
-    nav .links { display: none; }
+    nav .wrap { gap: 22px; }
+  }
+  @media (max-width: 660px) {
+    /* phone portrait: brand + Download on the first row, the links on a second */
+    nav .wrap { flex-wrap: wrap; height: auto; gap: 6px 16px; padding-top: 10px; padding-bottom: 8px; }
+    nav .links { order: 3; width: 100%; margin-left: 0; justify-content: center; gap: 26px; }
+    nav .links a { padding: 4px 0; }
     nav .btn { margin-left: auto; }
+    section, header { scroll-margin-top: 100px; }
   }
   @media (max-width: 600px) {
     body { font-size: 16px; }

@@ -160,7 +160,7 @@
             margin: 0 auto; }
   .phone { border-radius: 34px; padding: 10px; background: linear-gradient(160deg, #2a3350, #121829);
            border: 1px solid var(--card-b); box-shadow: 0 30px 80px rgba(0,0,0,0.55); }
-  .phone .screen { border-radius: 26px; overflow: hidden; aspect-ratio: 9 / 19.5; background: #0d1222;
+  .phone .screen { border-radius: 26px; overflow: hidden; aspect-ratio: 237 / 461; background: #0d1222;
                    display: grid; place-items: center; color: var(--muted); font-size: 14px; }
   .phone .screen img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
   .phone figcaption { text-align: center; color: var(--muted); font-size: 14.5px; margin-top: 14px; }
@@ -259,7 +259,7 @@
       <div class="card">
         <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="12" cy="18" r="2"/><path d="M7 6h10M6 8l5 8M18 8l-5 8"/></svg></div>
         <h3>tribbleNet mesh</h3>
-        <p>When the band won't reach, Subspace finds a relay path through stations it has heard, on its own. Any JS8 program can relay.</p>
+        <p>When the band won't reach, auto-route finds a relay path through stations it has heard, or you pick the hops yourself on the map. Any JS8 program can relay.</p>
       </div>
       <div class="card">
         <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
@@ -315,15 +315,19 @@
     <div class="feature">
       <div class="text">
         <span class="tag">Spots Map</span>
-        <h3>Who hears you, right now.</h3>
+        <h3>Who hears you, and the way through.</h3>
         <p>Every station that heard you, colored by signal strength, with lines to each one.
           Add PSKReporter spots, choose 5 to 60 minutes, pan and zoom.</p>
         <ul>
+          <li><b>Auto-route:</b> when a station is out of reach, Subspace finds a relay path
+            through stations it has heard and sends your message along it, hop by hop.
+            Shown here at 30x speed.</li>
+          <li><b>Manual route:</b> point and click stations on the map to build a relay path
+            with any number of hops.</li>
           <li>Start a QSO by clicking a station on the map.</li>
-          <li>Point and click to build a relay path with any number of hops.</li>
         </ul>
       </div>
-      <div class="frame"><a href="https://raw.githubusercontent.com/avantol/Subspace-Edition/master/spots_map_extd2.png"><img loading="lazy" src="https://raw.githubusercontent.com/avantol/Subspace-Edition/master/spots_map_extd2.png" alt="Spots Map showing stations hearing WM8Q across North America and Europe, colored by SNR"></a></div>
+      <div class="frame" style="max-width:560px;justify-self:center"><a href="https://raw.githubusercontent.com/avantol/Subspace-Edition/master/hop_routing_in_prog_anim.gif"><img loading="lazy" src="https://raw.githubusercontent.com/avantol/Subspace-Edition/master/hop_routing_in_prog_anim.gif" alt="Spots Map animation: automatic route discovery finding a multi-hop relay path, 30x speed"></a></div>
     </div>
 
     <div class="feature wide">
@@ -373,9 +377,9 @@
       <span class="pill">Pass code login</span>
     </div>
     <div class="phones">
-      <figure class="phone" style="margin:0"><div class="screen"><!-- PHONE_1 -->Screenshot 1</div><figcaption>Band activity</figcaption></figure>
-      <figure class="phone" style="margin:0"><div class="screen"><!-- PHONE_2 -->Screenshot 2</div><figcaption>Conversation</figcaption></figure>
-      <figure class="phone" style="margin:0"><div class="screen"><!-- PHONE_3 -->Screenshot 3</div><figcaption>Compose and send</figcaption></figure>
+      <figure class="phone" style="margin:0"><div class="screen"><img loading="lazy" src="img/phone_band.png" alt="Phone remote: Band tab listing JTTY stations with offset, SNR and age"></div><figcaption>Band activity</figcaption></figure>
+      <figure class="phone" style="margin:0"><div class="screen"><img loading="lazy" src="img/phone_convo.png" alt="Phone remote: Conversation tab with a JTTY QSO"></div><figcaption>Conversation</figcaption></figure>
+      <figure class="phone" style="margin:0"><div class="screen"><img loading="lazy" src="img/phone_compose.png" alt="Phone remote: Compose tab with Send, CQ, Reply, SNR and other buttons"></div><figcaption>Compose and send</figcaption></figure>
     </div>
     <p style="margin-top:36px"><a class="btn btn-ghost" href="https://groups.io/g/Subspace/message/404">Phone setup instructions</a></p>
   </div>

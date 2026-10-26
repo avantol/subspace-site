@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Subspace Edition - JS8 and JTTY, faster and farther</title>
+<meta name="description" content="Free, open-source JS8 and JTTY app: 64 WPM Subspace mode, auto-routing mesh network, live spots map, labeled waterfall, phone remote. 100% compatible with every JS8 program.">
+<meta property="og:title" content="Subspace Edition - JS8 and JTTY, faster and farther">
+<meta property="og:description" content="64 WPM, no clock sync, a mesh network that relays around poor conditions, a live spots map, and JTTY across the whole waterfall. Free for Windows, macOS, Linux and Raspberry Pi.">
+<meta property="og:image" content="https://raw.githubusercontent.com/avantol/Subspace-Edition/master/spots_map_extd2.png">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0b1020">
+<link rel="icon" href="https://raw.githubusercontent.com/avantol/Subspace-Edition/master/JS8_UI/remote/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b1020;
+    --bg2: #0f1630;
+    --card: rgba(255,255,255,0.04);
+    --card-b: rgba(255,255,255,0.09);
+    --text: #e8ecf8;
+    --muted: #9aa6c4;
+    --accent: #5eead4;
+    --accent2: #a78bfa;
+    --warm: #fbbf24;
+    --radius: 18px;
+    --max: 1160px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 17px; line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  img { max-width: 100%; display: block; }
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+
+  /* nav */
+  nav {
+    position: sticky; top: 0; z-index: 20;
+    background: rgba(11,16,32,0.72); backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--card-b);
+  }
+  nav .wrap { display: flex; align-items: center; gap: 28px; height: 64px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 800;
+           color: var(--text); letter-spacing: -0.01em; }
+  .brand img { width: 30px; height: 30px; border-radius: 8px; }
+  .brand:hover { text-decoration: none; }
+  nav .links { display: flex; gap: 22px; margin-left: auto; }
+  nav .links a { color: var(--muted); font-size: 15px; font-weight: 500; }
+  nav .links a:hover { color: var(--text); text-decoration: none; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 22px; border-radius: 999px; font-weight: 600; font-size: 16px;
+    border: 1px solid transparent; transition: transform .15s, box-shadow .15s;
+  }
+  .btn:hover { text-decoration: none; transform: translateY(-1px); }
+  .btn-primary { background: linear-gradient(135deg, var(--accent), #38bdf8);
+                 color: #04121a; box-shadow: 0 8px 30px rgba(94,234,212,0.25); }
+  .btn-ghost { border-color: var(--card-b); color: var(--text); background: var(--card); }
+  nav .btn { padding: 8px 16px; font-size: 14px; }
+
+  /* hero */
+  .hero { position: relative; overflow: hidden; padding: 96px 0 64px; }
+  .hero::before {
+    content: ""; position: absolute; inset: -40% -20% auto -20%; height: 900px;
+    background:
+      radial-gradient(600px 380px at 25% 30%, rgba(94,234,212,0.18), transparent 70%),
+      radial-gradient(640px 420px at 78% 20%, rgba(167,139,250,0.20), transparent 70%);
+    pointer-events: none;
+  }
+  .hero .wrap { position: relative; text-align: center; }
+  .eyebrow { display: inline-block; font-size: 13px; font-weight: 600; letter-spacing: .08em;
+             text-transform: uppercase; color: var(--accent);
+             padding: 6px 14px; border: 1px solid rgba(94,234,212,0.35);
+             border-radius: 999px; background: rgba(94,234,212,0.06); }
+  h1 { font-size: clamp(38px, 6vw, 68px); line-height: 1.05; letter-spacing: -0.035em;
+       margin: 22px auto 18px; max-width: 900px; font-weight: 800; }
+  .grad { background: linear-gradient(120deg, var(--accent), #38bdf8 45%, var(--accent2));
+          -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .lead { font-size: clamp(17px, 2vw, 20px); color: var(--muted); max-width: 760px; margin: 0 auto; }
+  .cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin: 34px 0 14px; }
+  .fine { font-size: 14px; color: var(--muted); }
+  .shot-hero { margin: 56px auto 0; max-width: 1040px; border-radius: 14px; overflow: hidden;
+               border: 1px solid var(--card-b);
+               box-shadow: 0 30px 90px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.03); }
+
+  /* stats */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 56px; }
+  .stat { background: var(--card); border: 1px solid var(--card-b); border-radius: var(--radius);
+          padding: 22px; text-align: left; }
+  .stat b { display: block; font-family: "JetBrains Mono", monospace; font-size: 30px;
+            color: var(--text); letter-spacing: -0.02em; }
+  .stat span { color: var(--muted); font-size: 15px; }
+
+  /* sections */
+  section { padding: 88px 0; }
+  section.alt { background: linear-gradient(180deg, var(--bg2), var(--bg)); }
+  .kicker { color: var(--accent2); font-weight: 600; font-size: 14px; letter-spacing: .08em;
+            text-transform: uppercase; }
+  h2 { font-size: clamp(30px, 4vw, 44px); line-height: 1.1; letter-spacing: -0.03em;
+       margin: 10px 0 14px; font-weight: 800; }
+  .sub { color: var(--muted); max-width: 720px; margin: 0 0 40px; font-size: 18px; }
+
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .card { background: var(--card); border: 1px solid var(--card-b); border-radius: var(--radius);
+          padding: 26px; transition: border-color .2s, transform .2s; }
+  .card:hover { border-color: rgba(94,234,212,0.35); transform: translateY(-2px); }
+  .card .ico { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center;
+               background: rgba(94,234,212,0.1); color: var(--accent); margin-bottom: 14px; }
+  .card .ico svg { width: 22px; height: 22px; }
+  .card h3 { margin: 0 0 6px; font-size: 19px; letter-spacing: -0.01em; }
+  .card p { margin: 0; color: var(--muted); font-size: 15.5px; }
+
+  /* feature rows with screenshots */
+  .feature { display: grid; grid-template-columns: 1fr 1.25fr; gap: 48px; align-items: center;
+             margin-bottom: 72px; }
+  .feature:last-child { margin-bottom: 0; }
+  .feature.flip .text { order: 2; }
+  /* wide, short screenshots: text above, picture across the full width */
+  .feature.wide { grid-template-columns: 1fr; gap: 22px; }
+  .feature.wide .text { max-width: 760px; }
+  .feature.wide .frame { justify-self: start; max-width: 100%; }
+  .feature.wide .frame img { width: auto; max-width: 100%; }
+  .feature h3 { font-size: 28px; letter-spacing: -0.02em; margin: 6px 0 12px; line-height: 1.15; }
+  .feature p { color: var(--muted); margin: 0 0 12px; }
+  .feature ul { margin: 8px 0 0; padding-left: 20px; color: var(--muted); }
+  .feature li { margin-bottom: 6px; }
+  .frame { border-radius: 14px; overflow: hidden; border: 1px solid var(--card-b);
+           background: #000; box-shadow: 0 24px 70px rgba(0,0,0,0.5); }
+  .frame a, .frame img { display: block; width: 100%; }
+  .tag { display: inline-block; font-size: 12.5px; font-weight: 600; padding: 3px 10px;
+         border-radius: 999px; background: rgba(167,139,250,0.12); color: var(--accent2); }
+
+  /* jtty */
+  .jtty { display: grid; grid-template-columns: 1.1fr 1fr; gap: 40px; align-items: start; }
+  .callout { border-radius: var(--radius); padding: 28px;
+             background: linear-gradient(140deg, rgba(251,191,36,0.10), rgba(251,191,36,0.02));
+             border: 1px solid rgba(251,191,36,0.28); }
+  .callout h3 { margin: 0 0 8px; color: var(--warm); font-size: 20px; }
+  .callout p { margin: 0 0 16px; color: #e9dcc0; }
+  .checks { list-style: none; padding: 0; margin: 0; }
+  .checks li { padding: 14px 0 14px 36px; border-bottom: 1px solid var(--card-b); position: relative; }
+  .checks li:last-child { border-bottom: 0; }
+  .checks li::before { content: ""; position: absolute; left: 0; top: 17px; width: 22px; height: 22px;
+                       border-radius: 50%; background: rgba(94,234,212,0.14); }
+  .checks li::after { content: ""; position: absolute; left: 7px; top: 22px; width: 8px; height: 5px;
+                      border-left: 2px solid var(--accent); border-bottom: 2px solid var(--accent);
+                      transform: rotate(-45deg); }
+  .checks b { color: var(--text); }
+  .checks span { color: var(--muted); }
+
+  /* phones */
+  .phones { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; max-width: 900px;
+            margin: 0 auto; }
+  .phone { border-radius: 34px; padding: 10px; background: linear-gradient(160deg, #2a3350, #121829);
+           border: 1px solid var(--card-b); box-shadow: 0 30px 80px rgba(0,0,0,0.55); }
+  .phone .screen { border-radius: 26px; overflow: hidden; aspect-ratio: 9 / 19.5; background: #0d1222;
+                   display: grid; place-items: center; color: var(--muted); font-size: 14px; }
+  .phone .screen img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+  .phone figcaption { text-align: center; color: var(--muted); font-size: 14.5px; margin-top: 14px; }
+  .phone-points { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 0 0 44px; }
+  .pill { padding: 8px 16px; border-radius: 999px; background: var(--card); border: 1px solid var(--card-b);
+          color: var(--text); font-size: 15px; }
+
+  /* compat + final */
+  .compat { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 32px; }
+  .os { background: var(--card); border: 1px solid var(--card-b); border-radius: 14px;
+        padding: 18px; text-align: center; font-weight: 600; }
+  .os small { display: block; color: var(--muted); font-weight: 400; font-size: 13.5px; margin-top: 4px; }
+  .final { text-align: center; padding: 100px 0; position: relative; overflow: hidden; }
+  .final::before { content: ""; position: absolute; inset: 0;
+                   background: radial-gradient(700px 300px at 50% 60%, rgba(94,234,212,0.13), transparent 70%); }
+  .final .wrap { position: relative; }
+
+  footer { border-top: 1px solid var(--card-b); padding: 34px 0; color: var(--muted); font-size: 14.5px; }
+  footer .wrap { display: flex; flex-wrap: wrap; gap: 18px 28px; align-items: center; }
+  footer .wrap > :first-child { margin-right: auto; }
+
+  @media (max-width: 920px) {
+    .grid { grid-template-columns: 1fr 1fr; }
+    .stats { grid-template-columns: 1fr 1fr; }
+    .feature, .jtty { grid-template-columns: 1fr; gap: 28px; }
+    .feature.flip .text { order: 0; }
+    .compat { grid-template-columns: 1fr 1fr; }
+    nav .links { display: none; }
+    nav .btn { margin-left: auto; }
+  }
+  @media (max-width: 600px) {
+    body { font-size: 16px; }
+    .wrap { padding: 0 16px; }
+    .grid { grid-template-columns: 1fr; }
+    .phones { grid-template-columns: 1fr; max-width: 300px; }
+    section { padding: 64px 0; }
+    .hero { padding: 64px 0 40px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#top"><img src="https://raw.githubusercontent.com/avantol/Subspace-Edition/master/JS8_UI/remote/icon-192.png" alt="">Subspace</a>
+    <div class="links">
+      <a href="#js8">JS8</a>
+      <a href="#jtty">JTTY</a>
+      <a href="#screens">Screens</a>
+      <a href="#phone">Phone</a>
+    </div>
+    <a class="btn btn-primary" href="https://github.com/avantol/Subspace-Edition/releases/latest">Download</a>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <span class="eyebrow">JS8 / JTTY Subspace Edition</span>
+    <h1>Everything JS8 does.<br><span class="grad">Four times faster, and farther.</span></h1>
+    <p class="lead">A free drop-in companion to JS8Call: 64 WPM Subspace mode, a mesh network
+      that relays around poor conditions, a live spots map, and JTTY conversations across the
+      whole waterfall. Fully compatible with every JS8 program on the air.</p>
+    <div class="cta">
+      <a class="btn btn-primary" href="https://github.com/avantol/Subspace-Edition/releases/latest">Download free</a>
+      <a class="btn btn-ghost" href="https://groups.io/g/Subspace/message/378">Your first JTTY QSO, click by click</a>
+    </div>
+    <p class="fine">Windows, macOS, Linux and Raspberry Pi. Open source (GPLv3). Installs beside your current JS8 program.</p>
+
+    <div class="stats">
+      <div class="stat"><b>64 WPM</b><span>Subspace mode, 4x JS8 Normal</span></div>
+      <div class="stat"><b>0</b><span>clock sync needed in Subspace mode</span></div>
+      <div class="stat"><b>~150 Hz</b><span>wide: 17 QSOs fit where 10 did</span></div>
+      <div class="stat"><b>100%</b><span>compatible with every JS8 program</span></div>
+    </div>
+  </div>
+</header>
+
+<section id="js8" class="alt">
+  <div class="wrap">
+    <div class="kicker">For JS8</div>
+    <h2>Faster messages. Longer reach. Less waiting.</h2>
+    <p class="sub">Subspace speaks plain JS8 to everyone, and adds a faster mode and smarter
+      tools for when you meet another Subspace station.</p>
+
+    <div class="grid">
+      <div class="card">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+        <h3>Subspace mode, 64 WPM</h3>
+        <p>Four times JS8 Normal, good to about -16 dB. A fifth speed beside Slow, Normal, Fast and Turbo.</p>
+      </div>
+      <div class="card">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+        <h3>No clock to keep right</h3>
+        <p>Subspace mode syncs to the signal itself, not to clock time, so clock drift never stops a decode.</p>
+      </div>
+      <div class="card">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="12" cy="18" r="2"/><path d="M7 6h10M6 8l5 8M18 8l-5 8"/></svg></div>
+        <h3>tribbleNet mesh</h3>
+        <p>When the band won't reach, Subspace finds a relay path through stations it has heard, on its own. Any JS8 program can relay.</p>
+      </div>
+      <div class="card">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+        <h3>Reliable delivery</h3>
+        <p>Messages, files, web links and ICS-213 forms arrive complete, with automatic repeats until every part is confirmed.</p>
+      </div>
+      <div class="card">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 21 3l-8 18-2-8-8-2z"/></svg></div>
+        <h3>Hailing and Typing...</h3>
+        <p>Announce yourself in under 4 seconds with no flood of replies, and let the other station know a reply is on its way.</p>
+      </div>
+      <div class="card">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg></div>
+        <h3>Spots, live</h3>
+        <p>A built-in map of who hears you, updated every few seconds, with PSKReporter spots that are not rate-limited.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="jtty">
+  <div class="wrap">
+    <div class="kicker">For JTTY</div>
+    <h2>JTTY conversations, the easy way.</h2>
+    <p class="sub">JTTY is a keyboard-to-keyboard mode for real conversations. Subspace makes
+      it simple to find people and talk with them.</p>
+
+    <div class="jtty">
+      <ul class="checks">
+        <li><b>Hears the whole waterfall.</b> <span>Subspace decodes every offset, full-time. WSJT-X decodes JTTY only from 1200 to 1800 Hz unless you move it.</span></li>
+        <li><b>Text appears as it arrives.</b> <span>Each message grows on screen piece by piece, so you can read along.</span></li>
+        <li><b>Click once to address.</b> <span>Pick a station and every message goes to it until you deselect.</span></li>
+        <li><b>Every station in its own window.</b> <span>Station Monitor shows one conversation at a time, with no noise from the rest of the band.</span></li>
+        <li><b>Logs the way LoTW expects.</b> <span>QSOs are logged as MFSK / JTTY, matching WSJT-X.</span></li>
+      </ul>
+      <div class="callout">
+        <h3>New to JTTY?</h3>
+        <p>A step-by-step guide takes you through a complete QSO, click by click. Tip: call CQ
+          between 1200 and 1800 Hz to reach stations running WSJT-X, then move to a quiet spot
+          together.</p>
+        <a class="btn btn-ghost" href="https://groups.io/g/Subspace/message/378">Read the JTTY how-to</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="screens" class="alt">
+  <div class="wrap">
+    <div class="kicker">See it</div>
+    <h2>Built for seeing the band at a glance.</h2>
+    <p class="sub">Click any screenshot to see it full size.</p>
+
+    <div class="feature">
+      <div class="text">
+        <span class="tag">Spots Map</span>
+        <h3>Who hears you, right now.</h3>
+        <p>Every station that heard you, colored by signal strength, with lines to each one.
+          Add PSKReporter spots, choose 5 to 60 minutes, pan and zoom.</p>
+        <ul>
+          <li>Start a QSO by clicking a station on the map.</li>
+          <li>Point and click to build a relay path with any number of hops.</li>
+        </ul>
+      </div>
+      <div class="frame"><a href="https://raw.githubusercontent.com/avantol/Subspace-Edition/master/spots_map_extd2.png"><img loading="lazy" src="https://raw.githubusercontent.com/avantol/Subspace-Edition/master/spots_map_extd2.png" alt="Spots Map showing stations hearing WM8Q across North America and Europe, colored by SNR"></a></div>
+    </div>
+
+    <div class="feature wide">
+      <div class="text">
+        <span class="tag">Labeled waterfall</span>
+        <h3>Every signal, named.</h3>
+        <p>Call signs are written right on the waterfall, color coded, at the offset and moment
+          each station was heard. Click a label to start a QSO.</p>
+      </div>
+      <div class="frame"><a href="https://raw.githubusercontent.com/avantol/Subspace-Edition/master/Subspace_labels2.png"><img loading="lazy" src="https://raw.githubusercontent.com/avantol/Subspace-Edition/master/Subspace_labels2.png" alt="Waterfall with call signs labeled at each signal"></a></div>
+    </div>
+
+    <div class="feature wide">
+      <div class="text">
+        <span class="tag">Band Activity</span>
+        <h3>One line per station.</h3>
+        <p>Band activity organized by call sign instead of by frequency, so a busy band reads
+          like a list of people. Calls to you are highlighted, and finding a call sign is
+          one search away.</p>
+      </div>
+      <div class="frame"><a href="https://raw.githubusercontent.com/avantol/Subspace-Edition/master/band_act_by_call.png"><img loading="lazy" src="https://raw.githubusercontent.com/avantol/Subspace-Edition/master/band_act_by_call.png" alt="Band Activity window listing one call sign per line"></a></div>
+    </div>
+
+    <div class="feature wide">
+      <div class="text">
+        <span class="tag">Station Monitor</span>
+        <h3>One conversation, nothing else.</h3>
+        <p>Open a window for any station and follow just that conversation, in both
+          directions, with your own messages shaded. Open as many as you like.</p>
+      </div>
+      <div class="frame"><a href="https://raw.githubusercontent.com/avantol/Subspace-Edition/master/station_monitor3.png"><img loading="lazy" src="https://raw.githubusercontent.com/avantol/Subspace-Edition/master/station_monitor3.png" alt="Station Monitor window showing a single conversation with KG7RXU"></a></div>
+    </div>
+  </div>
+</section>
+
+<section id="phone">
+  <div class="wrap" style="text-align:center">
+    <div class="kicker">Remote</div>
+    <h2>Your station, on your phone.</h2>
+    <p class="sub" style="margin-left:auto;margin-right:auto">Read the band, follow the
+      conversation and send, from any phone or PC browser. Nothing to install on the phone.</p>
+    <div class="phone-points">
+      <span class="pill">Band activity and conversation</span>
+      <span class="pill">CQ, Reply, SNR, Send</span>
+      <span class="pill">TX enable and Halt</span>
+      <span class="pill">Home Wi-Fi or Tailscale</span>
+      <span class="pill">Pass code login</span>
+    </div>
+    <div class="phones">
+      <figure class="phone" style="margin:0"><div class="screen"><!-- PHONE_1 -->Screenshot 1</div><figcaption>Band activity</figcaption></figure>
+      <figure class="phone" style="margin:0"><div class="screen"><!-- PHONE_2 -->Screenshot 2</div><figcaption>Conversation</figcaption></figure>
+      <figure class="phone" style="margin:0"><div class="screen"><!-- PHONE_3 -->Screenshot 3</div><figcaption>Compose and send</figcaption></figure>
+    </div>
+    <p style="margin-top:36px"><a class="btn btn-ghost" href="https://groups.io/g/Subspace/message/404">Phone setup instructions</a></p>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <div class="kicker">Zero risk</div>
+    <h2>Keep your current setup.</h2>
+    <p class="sub">Subspace installs to its own folder and never touches your existing JS8
+      program or settings. Run one or the other, whenever you like. It talks to every JS8
+      station on the air; the extra speed and tools kick in when you meet another Subspace
+      station.</p>
+    <div class="compat">
+      <div class="os">Windows<small>64-bit installer</small></div>
+      <div class="os">macOS<small>Apple silicon and Intel</small></div>
+      <div class="os">Linux<small>Ubuntu / Mint .deb</small></div>
+      <div class="os">Raspberry Pi<small>Debian 13 "Trixie"</small></div>
+    </div>
+  </div>
+</section>
+
+<section class="final">
+  <div class="wrap">
+    <h2>Get on the air with Subspace.</h2>
+    <p class="sub" style="margin:0 auto 32px">Free and open source. Questions, ideas and
+      how-tos are in the Subspace discussion group.</p>
+    <div class="cta">
+      <a class="btn btn-primary" href="https://github.com/avantol/Subspace-Edition/releases/latest">Download free</a>
+      <a class="btn btn-ghost" href="https://groups.io/g/Subspace/topics">Join the discussion</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Subspace Edition by WM8Q. Based on JS8Call; licensed GPLv3.</span>
+    <a href="https://github.com/avantol/Subspace-Edition">Source</a>
+    <a href="https://github.com/avantol/Subspace-Edition/releases/latest">Releases</a>
+    <a href="https://groups.io/g/Subspace/topics">Discussion group</a>
+  </div>
+</footer>
+
+</body>
+</html>

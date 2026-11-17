@@ -37,7 +37,9 @@
   }
   a { color: var(--accent); text-decoration: none; }
   a:hover { text-decoration: underline; }
-  img { max-width: 100%; display: block; }
+  /* every picture carries width/height so its space is held before it loads;
+     without that, a menu jump lands short when the lazy pictures above arrive */
+  img { max-width: 100%; height: auto; display: block; }
   .wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
 
   /* nav */
@@ -289,7 +291,7 @@
     </div>
     <p class="fine">Windows, macOS, Linux and Raspberry Pi. Open source (GPLv3). Installs beside your current JS8 program.</p>
 
-    <div class="shot-hero"><a href="https://raw.githubusercontent.com/avantol/Subspace-Edition/master/Subspace_labels2.png"><img src="https://raw.githubusercontent.com/avantol/Subspace-Edition/master/Subspace_labels2.png" alt="Waterfall with call signs labeled at each signal" style="display:block;width:100%"></a></div>
+    <div class="shot-hero"><a href="https://raw.githubusercontent.com/avantol/Subspace-Edition/master/Subspace_labels2.png"><img src="https://raw.githubusercontent.com/avantol/Subspace-Edition/master/Subspace_labels2.png" width="963" height="220" alt="Waterfall with call signs labeled at each signal" style="display:block;width:100%"></a></div>
 
     <div class="stats">
       <div class="stat"><b>64 WPM</b><span>Subspace mode, 4x JS8 Normal</span></div>
@@ -389,7 +391,7 @@
           <li>Start a QSO by clicking a station on the map.</li>
         </ul>
       </div>
-      <div class="frame" style="max-width:560px;justify-self:center"><a href="https://raw.githubusercontent.com/avantol/Subspace-Edition/master/hop_routing_in_prog_anim.gif"><img loading="lazy" src="https://raw.githubusercontent.com/avantol/Subspace-Edition/master/hop_routing_in_prog_anim.gif" alt="Spots Map animation: automatic route discovery finding a multi-hop relay path, 30x speed"></a></div>
+      <div class="frame" style="width:100%;max-width:560px;justify-self:center"><a href="https://raw.githubusercontent.com/avantol/Subspace-Edition/master/hop_routing_in_prog_anim.gif"><img loading="lazy" src="https://raw.githubusercontent.com/avantol/Subspace-Edition/master/hop_routing_in_prog_anim.gif" width="739" height="893" alt="Spots Map animation: automatic route discovery finding a multi-hop relay path, 30x speed"></a></div>
     </div>
 
     <div class="feature wide">
@@ -399,7 +401,7 @@
         <p>Call signs are written right on the waterfall, color coded, at the offset and moment
           each station was heard. Click a label to start a QSO.</p>
       </div>
-      <div class="frame"><a href="https://raw.githubusercontent.com/avantol/Subspace-Edition/master/Subspace_labels2.png"><img loading="lazy" src="https://raw.githubusercontent.com/avantol/Subspace-Edition/master/Subspace_labels2.png" alt="Waterfall with call signs labeled at each signal"></a></div>
+      <div class="frame"><a href="https://raw.githubusercontent.com/avantol/Subspace-Edition/master/Subspace_labels2.png"><img loading="lazy" src="https://raw.githubusercontent.com/avantol/Subspace-Edition/master/Subspace_labels2.png" width="963" height="220" style="width:963px" alt="Waterfall with call signs labeled at each signal"></a></div>
     </div>
 
     <div class="feature wide">
@@ -410,7 +412,7 @@
           like a list of people. Calls to you are highlighted, and finding a call sign is
           one search away.</p>
       </div>
-      <div class="frame"><a href="https://raw.githubusercontent.com/avantol/Subspace-Edition/master/band_act_by_call.png"><img loading="lazy" src="https://raw.githubusercontent.com/avantol/Subspace-Edition/master/band_act_by_call.png" alt="Band Activity window listing one call sign per line"></a></div>
+      <div class="frame"><a href="https://raw.githubusercontent.com/avantol/Subspace-Edition/master/band_act_by_call.png"><img loading="lazy" src="https://raw.githubusercontent.com/avantol/Subspace-Edition/master/band_act_by_call.png" width="766" height="243" style="width:766px" alt="Band Activity window listing one call sign per line"></a></div>
     </div>
 
     <div class="feature wide">
@@ -420,7 +422,7 @@
         <p>Open a window for any station and follow just that conversation, in both
           directions, with your incoming messages shaded. Open as many as you like.</p>
       </div>
-      <div class="frame"><a href="https://raw.githubusercontent.com/avantol/Subspace-Edition/master/station_monitor3.png"><img loading="lazy" src="https://raw.githubusercontent.com/avantol/Subspace-Edition/master/station_monitor3.png" alt="Station Monitor window showing a single conversation with KG7RXU"></a></div>
+      <div class="frame"><a href="https://raw.githubusercontent.com/avantol/Subspace-Edition/master/station_monitor3.png"><img loading="lazy" src="https://raw.githubusercontent.com/avantol/Subspace-Edition/master/station_monitor3.png" width="666" height="218" style="width:666px" alt="Station Monitor window showing a single conversation with KG7RXU"></a></div>
     </div>
   </div>
 </section>
@@ -471,7 +473,7 @@
             Linux Mint.</li>
         </ul>
       </div>
-      <div class="frame" style="max-width:572px;justify-self:center"><img loading="lazy" src="https://raw.githubusercontent.com/avantol/Subspace-Meshtastic-Basic/main/wio_tracker.png" alt="Seeed Studio Wio Tracker L1 Pro, a handheld Meshtastic device with a small screen and antenna"></div>
+      <div class="frame" style="width:100%;max-width:572px;justify-self:center"><img loading="lazy" src="https://raw.githubusercontent.com/avantol/Subspace-Meshtastic-Basic/main/wio_tracker.png" width="572" height="430" alt="Seeed Studio Wio Tracker L1 Pro, a handheld Meshtastic device with a small screen and antenna"></div>
     </div>
 
     <h3 class="chain-title">How it connects</h3>
